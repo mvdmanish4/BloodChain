@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+
+    <script>
+window.onload = function () {
+
+if (typeof web3 === 'undefined') {
+document.getElementById('metamask').innerHTML = 'You need <a href="https://metamask.io/">MetaMask</a> browser plugin to run this example'
+}
+getvalue();
+}
+
+function getvalue() {
+    try {
+        var abi = [
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "x",
+				"type": "uint256"
+			}
+		],
+		"name": "set",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "get",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+    
+        var contractaddress = '0x69f4a16b113a9f395cbbfebacdddb7938fa95253';
+        
+        var myAbi = web3.eth.contract(abi);
+        var myfunction = myAbi.at(contractaddress);
+       
+        myfunction.get.call(function (err, xname) {
+            if (err) { console.log(err) }
+            if (xname) {
+                
+                document.getElementById("xbalance").innerHTML = "last inserted value into the blockchain is : " + xname;
+            }
+        });
+    }
+    catch (err) {
+        document.getElementById("xbalance").innerHTML = err;
+    }
+}
+
+
+function setvalue() {
+    try {
+        
+        var abi = [
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "x",
+				"type": "uint256"
+			}
+		],
+		"name": "set",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "get",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+        
+        var contractaddress = '0x69f4a16b113a9f395cbbfebacdddb7938fa95253';
+      
+        var myAbi = web3.eth.contract(abi);
+        var myfunction = myAbi.at(contractaddress);
+  
+        myfunction.set.sendTransaction(document.getElementById("xvalue").value, { from: web3.eth.accounts[0], gas: 4000000 }, function (error, result) {
+            if (!error) {
+                console.log(result);
+            } else {
+                console.log(error);
+            }
+        })
+    } catch (err) {
+        document.getElementById("xvalue").innerHTML = err;
+    }
+}
+
+    </script>
+
+    <center>
+        <div id="metamask"></div>
+        <h3>Insert and retrieve value on the blockchain</h3>
+        <br />
+        <table>
+            <tr>
+                <td></td>
+                <td>
+                    <div id="xbalance"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>Insert a new value :</td>
+                <td>
+                    <input id="xvalue" type="text" />
+                    <input id="Button1" type="button" onclick="setvalue()" value="Add to Blockchain" />
+                </td>
+            </tr>
+        </table>
+    </center>
+</body>
+</html>
